@@ -18,20 +18,29 @@ app.use('/pubs', pubsRouter);
 app.use('/uploads', express.static('uploads'));
 app.use('/requests', requestsRouter);
 
+app.use((req, res, next) => {
+  let baseUrl = req.baseUrl || '';
+  if (!baseUrl || baseUrl === '/') {
+    baseUrl = '';
+  }
+  res.locals.baseUrl = baseUrl;
+  next();
+});
+
 app.get('/', (req, res) => {
-  res.render('home');
+  res.render('home', { baseUrl: res.locals.baseUrl });
 });
 
 app.get('/bands/new', (req, res) => {
-  res.render('band_form');
+  res.render('band_form', { baseUrl: res.locals.baseUrl });
 });
 
 app.get('/pubs/new', (req, res) => {
-  res.render('pub_form');
+  res.render('pub_form', { baseUrl: res.locals.baseUrl });
 });
 
 app.get('/requests/new', (req, res) => {
-  res.render('request_form');
+  res.render('request_form', { baseUrl: res.locals.baseUrl });
 });
 
 const port = process.env.PORT || 3000;

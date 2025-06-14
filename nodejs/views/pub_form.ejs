@@ -6,12 +6,12 @@
 </head>
 <body>
   <h1>Dodaj nowy pub</h1>
-  <form action="/pubs" method="POST" enctype="multipart/form-data">
+  <form action="<%= baseUrl %>/pubs" method="POST" enctype="multipart/form-data">
     <label>Nazwa: <input type="text" name="name" required></label><br>
     <label>Lokalizacja: <input type="text" name="location" required></label><br>
     <label>Obrazek: <input type="file" name="image"></label><br>
     <button type="submit">Dodaj</button>
   </form>
-  <a href="/">Powrót</a>
+  <a href="<%= baseUrl %>/">Powrót</a>
 </body>
 </html>
