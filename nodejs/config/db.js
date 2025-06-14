@@ -1,13 +1,20 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
+async function connectDB() {
+  let mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    // Try to use in-memory MongoDB
+    const { MongoMemoryServer } = require('mongodb-memory-server');
+    const mongod = await MongoMemoryServer.create();
+    mongoUri = mongod.getUri();
+    console.log('Używam in-memory MongoDB:', mongoUri);
+  }
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to MongoDB successfully!');
+    await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log('MongoDB connected');
   } catch (err) {
     console.error('Error with MongoDB Connection: ', err);
-    process.exit(1);
   }
-};
+}
 
 module.exports = connectDB;

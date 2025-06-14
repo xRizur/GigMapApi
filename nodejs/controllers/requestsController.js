@@ -1,5 +1,5 @@
 const Request = require('../models/Request');
-const Band = require('../models/band');
+const Band = require('../models/Band');
 const Pub = require('../models/Pub');
 
 

@@ -1,4 +1,4 @@
-const Band = require('../models/band');
+const Band = require('../models/Band');
 const fs = require('fs');
 
 const addBand = async (req, res) => {
