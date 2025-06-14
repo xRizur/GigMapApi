@@ -48,10 +48,24 @@
       margin-top: 30px;
       color: #777;
     }
+
+    .links {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #4CAF50;
+    }
   </style>
 </head>
 <body>
   <h1>Zespoły zarejestrowane w GigMap</h1>
+  <div class="links">
+    <a href="/bands/new">Dodaj zespół</a> | <a href="/">Strona główna</a>
+  </div>
 
   <% if (bands.length === 0) { %>
     <p class="center">Brak zespołów w bazie.</p>

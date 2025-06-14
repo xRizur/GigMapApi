@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodaj request</title>
+</head>
+<body>
+  <h1>Dodaj nowy request</h1>
+  <form action="/requests" method="POST">
+    <label>ID zespołu: <input type="text" name="bandId" required></label><br>
+    <label>ID pubu: <input type="text" name="pubId" required></label><br>
+    <label>Start: <input type="datetime-local" name="start" required></label><br>
+    <label>Koniec: <input type="datetime-local" name="end" required></label><br>
+    <label>Wiadomość: <input type="text" name="message"></label><br>
+    <label>Inicjator: 
+      <select name="initiator" required>
+        <option value="band">Zespół</option>
+        <option value="pub">Pub</option>
+      </select>
+    </label><br>
+    <button type="submit">Dodaj</button>
+  </form>
+  <a href="/">Powrót</a>
+</body>
+</html>
