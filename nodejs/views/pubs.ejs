@@ -85,7 +85,7 @@
             <td><%= pub.location %></td>
             <td>
               <% if (pub.image) { %>
-                <img src="/<%= pub.image %>" alt="<%= pub.name %>" />
+                <img src="<%= baseUrl %>/uploads/<%= pub.image %>" alt="<%= pub.name %>" />
               <% } else { %>
                 Brak
               <% } %>

@@ -13,44 +13,49 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const mainRouter = express.Router();
+const host = process.env.USER;
+const actualBasePath = host ? `/${host}` : '';
 
 app.use((req, res, next) => {
-  const urlParts = req.originalUrl.split('/');
-  const prefix = urlParts.length > 1 && urlParts[1] ? `/${urlParts[1]}` : '';
-  res.locals.baseUrl = prefix;
+  res.locals.baseUrl = actualBasePath;
   next();
 });
 
 
-const mainRouter = express.Router();
 
 mainRouter.use('/bands', bandsRouter);
 mainRouter.use('/pubs', pubsRouter);
-mainRouter.use('/uploads', express.static('uploads'));
+mainRouter.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 mainRouter.use('/requests', requestsRouter);
 
 mainRouter.get('/', (req, res) => {
-  res.render('home', { baseUrl: res.locals.baseUrl });
+  res.render('home');
 });
 
 mainRouter.get('/bands/new', (req, res) => {
-  res.render('band_form', { baseUrl: res.locals.baseUrl });
+  res.render('band_form');
 });
 
 mainRouter.get('/pubs/new', (req, res) => {
-  res.render('pub_form', { baseUrl: res.locals.baseUrl });
+  res.render('pub_form');
 });
 
 mainRouter.get('/requests/new', (req, res) => {
-  res.render('request_form', { baseUrl: res.locals.baseUrl });
+  res.render('request_form');
 });
+
 const port = process.env.PORT || 3000;
-const host = process.env.USER;
-app.use('/', mainRouter);    // dla /
-app.use(`/${host}`, mainRouter);      // dla /p26
-// dla zmiennej const port
-app.use(`/${port}`, mainRouter); // dla /3000 lub innego portu
+
+
+app.use(actualBasePath, mainRouter);
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    if (actualBasePath) {
+        console.log(`App available at http://localhost:${port}${actualBasePath}`);
+    } else {
+        console.log(`App available at http://localhost:${port}`);
+    }
 });

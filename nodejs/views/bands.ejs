@@ -85,7 +85,7 @@
             <td><%= band.genre %></td>
             <td>
               <% if (band.image) { %>
-                <img src="/<%= band.image %>" alt="<%= band.name %>" />
+                <img src="<%= baseUrl %>/uploads/<%= band.image %>" alt="<%= band.name %>" />
               <% } else { %>
                 Brak
               <% } %>
