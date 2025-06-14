@@ -15,7 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use((req, res, next) => {
-  res.locals.baseUrl = req.baseUrl || '';
+  const urlParts = req.originalUrl.split('/');
+  const prefix = urlParts.length > 1 && urlParts[1] ? `/${urlParts[1]}` : '';
+  res.locals.baseUrl = prefix;
   next();
 });
 
@@ -28,19 +30,19 @@ mainRouter.use('/uploads', express.static('uploads'));
 mainRouter.use('/requests', requestsRouter);
 
 mainRouter.get('/', (req, res) => {
-  res.render('home', { baseUrl: res.locals.baseUrl || '' });
+  res.render('home', { baseUrl: res.locals.baseUrl });
 });
 
 mainRouter.get('/bands/new', (req, res) => {
-  res.render('band_form', { baseUrl: res.locals.baseUrl || '' });
+  res.render('band_form', { baseUrl: res.locals.baseUrl });
 });
 
 mainRouter.get('/pubs/new', (req, res) => {
-  res.render('pub_form', { baseUrl: res.locals.baseUrl || '' });
+  res.render('pub_form', { baseUrl: res.locals.baseUrl });
 });
 
 mainRouter.get('/requests/new', (req, res) => {
-  res.render('request_form', { baseUrl: res.locals.baseUrl || '' });
+  res.render('request_form', { baseUrl: res.locals.baseUrl });
 });
 const port = process.env.PORT || 3000;
 const host = process.env.USER;
