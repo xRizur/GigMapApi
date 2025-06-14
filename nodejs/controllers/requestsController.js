@@ -76,7 +76,7 @@ const getRequests = async (req, res) => {
 const viewRequests = async (req, res) => {
     try {
       const requests = await Request.find().populate('bandId').populate('pubId');
-      res.render('requests', { requests });
+      res.render('requests', { requests, baseUrl: res.locals.baseUrl || '' });
     } catch (error) {
       console.error("Error rendering requests:", error);
       res.status(500).send("Error rendering requests");
@@ -123,7 +123,7 @@ const viewRequests = async (req, res) => {
       target.availability = newAvailability;
       await target.save();
   
-      res.send("Request accepted and availability updated successfully");
+      res.redirect((res.locals.baseUrl || '') + '/requests/view');
     } catch (error) {
       console.error("Error accepting request:", error);
       res.status(500).send("Error accepting request");
@@ -139,7 +139,7 @@ const viewRequests = async (req, res) => {
   
       request.status = 'rejected';
       await request.save();
-      res.redirect('/requests/view');
+      res.redirect((res.locals.baseUrl || '') + '/requests/view');
     } catch (err) {
       console.error(err);
       res.status(500).send("Error");

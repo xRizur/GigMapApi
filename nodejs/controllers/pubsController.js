@@ -33,7 +33,7 @@ const viewPubs = async (req, res) => {
     try {
         const data = await Pub.find();
         const pubs = data;
-        res.render('pubs', { pubs });
+        res.render('pubs', { pubs, baseUrl: res.locals.baseUrl || '' });
     } catch (error) {
         console.error("Error fetching pubs:", error);
         return res.status(500).send("Error fetching pubs");

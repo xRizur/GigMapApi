@@ -34,7 +34,7 @@ const viewBands = async (req, res) => {
     try {
         const data = await Band.find();
         const bands = data;
-        res.render('bands', { bands });
+        res.render('bands', { bands, baseUrl: res.locals.baseUrl || '' });
     } catch (error) {
         console.error("Error fetching bands:", error);
         return res.status(500).send("Error fetching bands");
