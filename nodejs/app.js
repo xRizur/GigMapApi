@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 });
 
 
+mainRouter.use(express.static(path.join(__dirname, 'public')));
 
 mainRouter.use('/bands', bandsRouter);
 mainRouter.use('/pubs', pubsRouter);
