@@ -9,6 +9,14 @@ const connectDB = require('./config/db');
 
 connectDB();
 
+// Konfiguracja EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Middleware do parsowania JSON i form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Pobierz BASE_PATH z zmiennej środowiskowej USER z prefixem slash
 const BASE_PATH = process.env.USER ? `/${process.env.USER}` : '';
 
