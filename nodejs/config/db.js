@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 async function connectDB() {
   let mongoUri = process.env.MONGO_URI;
   if (!mongoUri) {
-    // Try to use in-memory MongoDB
     const { MongoMemoryServer } = require('mongodb-memory-server');
     const mongod = await MongoMemoryServer.create();
     mongoUri = mongod.getUri();

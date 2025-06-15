@@ -17,7 +17,7 @@
 
     table {
       width: 90%;
-      margin: 0 auto;
+      margin: 20px auto;
       border-collapse: collapse;
       background-color: #fff;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -27,6 +27,7 @@
       padding: 12px 20px;
       border-bottom: 1px solid #ddd;
       text-align: left;
+      word-break: break-word;
     }
 
     th {
@@ -35,7 +36,8 @@
     }
 
     img {
-      max-width: 150px;
+      max-width: 100px;
+      max-height: 100px;
       border-radius: 6px;
     }
 
@@ -56,38 +58,83 @@
 
     .links a {
       margin: 0 10px;
+      padding: 8px 15px;
       text-decoration: none;
-      color: #4CAF50;
+      color: #fff;
+      background-color: #4CAF50;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .links a:hover {
+      background-color: #45a049;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
   <h1>Puby Zarejestrowane w GigMap</h1>
   <div class="links">
-    <a href="/pubs/new">Dodaj pub</a> | <a href="/">Strona główna</a>
+    <a href="<%= basePath %>/" class="nav-link">Powrót do strony głównej</a>
+    <a href="<%= basePath %>/pubs/new"  class="nav-link">Dodaj pub</a> | <a href="<%= basePath %>/"  class="nav-link">Strona główna</a>
   </div>
 
   <% if (pubs.length === 0) { %>
-    <p class="center">Brak zespołów w bazie.</p>
+    <p class="center">Brak pubów w bazie.</p>
   <% } else { %>
     <table>
       <thead>
         <tr>
           <th>Nazwa</th>
-          <th>Lokalizacja</th>
+          <th>Miasto</th>
+          <th>Adres</th>
+          <th>Opis</th>
+          <th>Email</th>
+          <th>Telefon</th>
+          <th>WWW</th>
+          <th>Mapa</th>
           <th>Obrazek</th>
+          <th>Dostępność</th>
         </tr>
       </thead>
       <tbody>
         <% pubs.forEach(pub => { %>
           <tr>
             <td><%= pub.name %></td>
-            <td><%= pub.location %></td>
+            <td><%= pub.city %></td>
+            <td><%= pub.address %></td>
+            <td><%= pub.description || 'Brak' %></td>
+            <td><%= pub.contactEmail || 'Brak' %></td>
+            <td><%= pub.contactPhone || 'Brak' %></td>
             <td>
-              <% if (pub.image) { %>
-                <img src="/<%= pub.image %>" alt="<%= pub.name %>" />
+              <% if (pub.websiteUrl) { %>
+                <a href="<%= pub.websiteUrl %>" target="_blank">Link</a>
               <% } else { %>
                 Brak
+              <% } %>
+            </td>
+            <td>
+              <% if (pub.map_url) { %>
+                <a href="<%= pub.map_url %>" target="_blank">Mapa</a>
+              <% } else { %>
+                Brak
+              <% } %>
+            </td>
+            <td>
+              <% if (pub.image) { %>
+                <img src="<%= basePath %>/<%= pub.image %>" alt="<%= pub.name %>" />
+              <% } else { %>
+                Brak
+              <% } %>
+            </td>
+            <td>
+              <% if (pub.availability && pub.availability.length > 0) { %>
+                <ul>
+                  <% pub.availability.forEach(slot => { %>
+                    <li><%= new Date(slot.start).toLocaleString('pl-PL') %> - <%= new Date(slot.end).toLocaleString('pl-PL') %></li>
+                  <% }) %>
+                </ul>
+              <% } else { %>
+                Brak informacji
               <% } %>
             </td>
           </tr>

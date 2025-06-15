@@ -3,6 +3,19 @@ const Band = require('../models/Band');
 const Pub = require('../models/Pub');
 
 
+const showNewRequestForm = async (req, res) => {
+  try {
+    const bands = await Band.find({}, 'id name').exec();
+    const pubs = await Pub.find({}, 'id name').exec();
+    const basePath = res.locals.basePath || req.app.locals.basePath || '';
+    res.render('request_form', { bands, pubs, basePath });
+  } catch (error) {
+    console.error("Error fetching data for request form:", error);
+    res.status(500).send("Error loading request form");
+  }
+};
+
+
 const createRequest = async (req, res) => {
   try {
     const { bandId, pubId, start, end, message, initiator } = req.body;
@@ -35,7 +48,7 @@ const createRequest = async (req, res) => {
       return res.status(400).send("Requested slot is not available");
     }
 
-    const newRequest = await Request.create({
+    await Request.create({
       bandId,
       pubId,
       start,
@@ -44,7 +57,8 @@ const createRequest = async (req, res) => {
       initiator
     });
 
-    res.status(201).send("Request created successfully with id: " + newRequest._id);
+    const basePath = res.locals.basePath || req.app.locals.basePath || '';
+    res.redirect(`${basePath}/requests/view`);
 
   } catch (error) {
     console.error("Error creating request:", error);
@@ -76,7 +90,8 @@ const getRequests = async (req, res) => {
 const viewRequests = async (req, res) => {
     try {
       const requests = await Request.find().populate('bandId').populate('pubId');
-      res.render('requests', { requests });
+      const basePath = res.locals.basePath || req.app.locals.basePath || '';
+      res.render('requests', { requests, basePath });
     } catch (error) {
       console.error("Error rendering requests:", error);
       res.status(500).send("Error rendering requests");
@@ -123,7 +138,8 @@ const viewRequests = async (req, res) => {
       target.availability = newAvailability;
       await target.save();
   
-      res.send("Request accepted and availability updated successfully");
+      const basePath = res.locals.basePath || req.app.locals.basePath || '';
+      res.redirect(`${basePath}/requests/view`);
     } catch (error) {
       console.error("Error accepting request:", error);
       res.status(500).send("Error accepting request");
@@ -139,11 +155,12 @@ const viewRequests = async (req, res) => {
   
       request.status = 'rejected';
       await request.save();
-      res.redirect('/requests/view');
+      const basePath = res.locals.basePath || req.app.locals.basePath || '';
+      res.redirect(`${basePath}/requests/view`);
     } catch (err) {
       console.error(err);
       res.status(500).send("Error");
     }
   };
   
-module.exports = { createRequest, getRequests, viewRequests, acceptRequest, rejectRequest };
+module.exports = { createRequest, getRequests, viewRequests, acceptRequest, rejectRequest, showNewRequestForm };
