@@ -64,7 +64,7 @@
 <body>
   <h1>Zespoły zarejestrowane w GigMap</h1>
   <div class="links">
-    <a href="/bands/new">Dodaj zespół</a> | <a href="/">Strona główna</a>
+    <a href="<%= url('/bands/new') %>">Dodaj zespół</a> | <a href="<%= url('/') %>">Strona główna</a>
   </div>
 
   <% if (bands.length === 0) { %>
@@ -85,7 +85,7 @@
             <td><%= band.genre %></td>
             <td>
               <% if (band.image) { %>
-                <img src="/<%= band.image %>" alt="<%= band.name %>" />
+                <img src="<%= url('/uploads/' + band.image) %>" alt="<%= band.name %>" />
               <% } else { %>
                 Brak
               <% } %>

@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1>Dodaj nowy request</h1>
-  <form action="/requests" method="POST">
+  <form action="<%= url('/requests') %>" method="POST">
     <label>ID zespołu: <input type="text" name="bandId" required></label><br>
     <label>ID pubu: <input type="text" name="pubId" required></label><br>
     <label>Start: <input type="datetime-local" name="start" required></label><br>
@@ -20,6 +20,6 @@
     </label><br>
     <button type="submit">Dodaj</button>
   </form>
-  <a href="/">Powrót</a>
+  <a href="<%= url('/') %>">Powrót</a>
 </body>
 </html>
