@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista Pubów</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px 20px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      word-break: break-word;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    img {
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: 6px;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .center {
+      text-align: center;
+      margin-top: 30px;
+      color: #777;
+    }
+
+    .links {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .links a {
+      margin: 0 10px;
+      padding: 8px 15px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #4CAF50;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .links a:hover {
+      background-color: #45a049;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Puby Zarejestrowane w GigMap</h1>
+  <div class="links">
+    <a href="<%= basePath %>/" class="nav-link">Powrót do strony głównej</a>
+    <a href="<%= basePath %>/pubs/new"  class="nav-link">Dodaj pub</a> | <a href="<%= basePath %>/"  class="nav-link">Strona główna</a>
+  </div>
+
+  <% if (pubs.length === 0) { %>
+    <p class="center">Brak pubów w bazie.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Nazwa</th>
+          <th>Miasto</th>
+          <th>Adres</th>
+          <th>Opis</th>
+          <th>Email</th>
+          <th>Telefon</th>
+          <th>WWW</th>
+          <th>Mapa</th>
+          <th>Obrazek</th>
+          <th>Dostępność</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pubs.forEach(pub => { %>
+          <tr>
+            <td><%= pub.name %></td>
+            <td><%= pub.city %></td>
+            <td><%= pub.address %></td>
+            <td><%= pub.description || 'Brak' %></td>
+            <td><%= pub.contactEmail || 'Brak' %></td>
+            <td><%= pub.contactPhone || 'Brak' %></td>
+            <td>
+              <% if (pub.websiteUrl) { %>
+                <a href="<%= pub.websiteUrl %>" target="_blank">Link</a>
+              <% } else { %>
+                Brak
+              <% } %>
+            </td>
+            <td>
+              <% if (pub.map_url) { %>
+                <a href="<%= pub.map_url %>" target="_blank">Mapa</a>
+              <% } else { %>
+                Brak
+              <% } %>
+            </td>
+            <td>
+              <% if (pub.image) { %>
+                <img src="<%= basePath %>/<%= pub.image %>" alt="<%= pub.name %>" />
+              <% } else { %>
+                Brak
+              <% } %>
+            </td>
+            <td>
+              <% if (pub.availability && pub.availability.length > 0) { %>
+                <ul>
+                  <% pub.availability.forEach(slot => { %>
+                    <li><%= new Date(slot.start).toLocaleString('pl-PL') %> - <%= new Date(slot.end).toLocaleString('pl-PL') %></li>
+                  <% }) %>
+                </ul>
+              <% } else { %>
+                Brak informacji
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</body>
+</html>

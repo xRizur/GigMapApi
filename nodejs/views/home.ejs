@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>GigMap - Strona główna</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', sans-serif; 
+      background-color: #f9f9f9; 
+      padding: 40px; 
+      margin: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    h1 { 
+      color: #4CAF50; 
+      margin-bottom: 40px;
+      font-size: 3em;
+    }
+    .nav-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    ul { 
+      list-style: none; 
+      padding: 0; 
+      margin: 0;
+    }
+    li { 
+      margin: 20px 0; 
+      text-align: center;
+    }
+    .main-link { 
+      color: #fff; 
+      background-color: #4CAF50;
+      text-decoration: none; 
+      font-size: 1.3em; 
+      padding: 12px 25px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .main-link:hover { 
+      background-color: #45a049;
+      transform: translateY(-2px);
+    }
+    .add-link {
+      color: #5cb85c;
+      text-decoration: none;
+      font-size: 1.1em;
+      padding: 10px 15px;
+      border: 1px solid #5cb85c;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .add-link:hover {
+      background-color: #5cb85c;
+      color: #fff;
+      text-decoration: none;
+    }
+    .link-group span {
+        margin: 0 5px;
+        color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>GigMap</h1>
+  <div class="nav-container">
+    <ul>
+      <li class="link-group">
+        <a href="<%= basePath %>/bands/view" class="main-link">Lista zespołów</a>
+        <span>|</span>
+        <a href="<%= basePath %>/bands/new" class="add-link">Dodaj zespół</a>
+      </li>
+      <li class="link-group">
+        <a href="<%= basePath %>/pubs/view" class="main-link">Lista pubów</a>
+        <span>|</span>
+        <a href="<%= basePath %>/pubs/new" class="add-link">Dodaj pub</a>
+      </li>
+      <li class="link-group">
+        <a href="<%= basePath %>/requests/view" class="main-link">Lista requestów</a>
+        <span>|</span>
+        <a href="<%= basePath %>/requests/new" class="add-link">Dodaj request</a>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

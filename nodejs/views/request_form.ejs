@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodaj request</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; padding: 20px; margin: 0; color: #333; }
+    .container { max-width: 600px; margin: 40px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #4CAF50; margin-bottom: 30px; }
+    form div { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+    input[type="text"],
+    input[type="datetime-local"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    button[type="submit"]:hover { background-color: #45a049; }
+    .nav-link { display: block; text-align: center; margin-top: 20px; color: #4CAF50; text-decoration: none; font-size: 1em; }
+    .nav-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dodaj nowy request</h1>
+    <form action="<%= basePath %>/requests" method="POST">
+      <div>
+        <label for="bandId">Zespół:</label>
+        <select id="bandId" name="bandId" required>
+          <% bands.forEach(band => { %>
+            <option value="<%= band._id %>"><%= band.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div>
+        <label for="pubId">Pub:</label>
+        <select id="pubId" name="pubId" required>
+          <% pubs.forEach(pub => { %>
+            <option value="<%= pub._id %>"><%= pub.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div>
+        <label for="start">Start:</label>
+        <input type="datetime-local" id="start" name="start" required>
+      </div>
+      <div>
+        <label for="end">Koniec:</label>
+        <input type="datetime-local" id="end" name="end" required>
+      </div>
+      <div>
+        <label for="message">Wiadomość:</label>
+        <input type="text" id="message" name="message">
+      </div>
+      <div>
+        <label for="initiator">Inicjator:</label>
+        <select id="initiator" name="initiator" required>
+          <option value="band">Zespół</option>
+          <option value="pub">Pub</option>
+        </select>
+      </div>
+      <button type="submit">Dodaj</button>
+    </form>
+    <a href="<%= basePath %>/" class="nav-link">Powrót do strony głównej</a>
+  </div>
+</body>
+</html>
