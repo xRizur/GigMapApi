@@ -15,10 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 
 const mainRouter = express.Router();
 const host = process.env.USER;
-const actualBasePath = host ? `/${host}` : '';
 
-app.use((req, res, next) => {
-  res.locals.baseUrl = actualBasePath;
+mainRouter.use((req, res, next) => {
+  res.locals.baseUrl = req.baseUrl; // req.baseUrl to ścieżka, pod którą mainRouter jest zamontowany
   next();
 });
 
@@ -31,32 +30,35 @@ mainRouter.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 mainRouter.use('/requests', requestsRouter);
 
 mainRouter.get('/', (req, res) => {
-  res.render('home');
+  res.render('home'); // res.locals.baseUrl będzie dostępne
 });
 
 mainRouter.get('/bands/new', (req, res) => {
-  res.render('band_form');
+  res.render('band_form'); // res.locals.baseUrl będzie dostępne
 });
 
 mainRouter.get('/pubs/new', (req, res) => {
-  res.render('pub_form');
+  res.render('pub_form'); // res.locals.baseUrl będzie dostępne
 });
 
 mainRouter.get('/requests/new', (req, res) => {
-  res.render('request_form');
+  res.render('request_form'); // res.locals.baseUrl będzie dostępne
 });
 
 const port = process.env.PORT || 3000;
 
+// Montujemy mainRouter pod ścieżką główną
+app.use('/', mainRouter);
 
-app.use(actualBasePath, mainRouter);
-
+// Jeśli host (np. p26) jest zdefiniowany, montujemy mainRouter również pod tym prefiksem
+if (host) {
+  app.use(`/${host}`, mainRouter);
+}
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    if (actualBasePath) {
-        console.log(`App available at http://localhost:${port}${actualBasePath}`);
-    } else {
-        console.log(`App available at http://localhost:${port}`);
+    console.log(`App available at http://localhost:${port}`);
+    if (host) {
+        console.log(`App also available at http://localhost:${port}/${host}`);
     }
 });
