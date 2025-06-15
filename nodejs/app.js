@@ -9,13 +9,8 @@ const connectDB = require('./config/db');
 
 connectDB();
 
-// Pobierz BASE_PATH z zmiennych środowiskowych (np. /p26)
-const BASE_PATH = process.env.USER || process.env.PORT;
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Pobierz BASE_PATH z zmiennej środowiskowej USER z prefixem slash
+const BASE_PATH = process.env.USER ? `/${process.env.USER}` : '';
 
 // Helper do generowania URL-i dostępny w wszystkich templateach
 app.locals.basePath = BASE_PATH;
@@ -23,11 +18,6 @@ app.locals.url = (path) => BASE_PATH + path;
 
 // Statyczne pliki
 app.use(BASE_PATH + '/uploads', express.static('uploads'));
-
-// Routery z prefixem
-app.use(BASE_PATH + '/bands', bandsRouter);
-app.use(BASE_PATH + '/pubs', pubsRouter);
-app.use(BASE_PATH + '/requests', requestsRouter);
 
 // Główne endpointy
 app.get(BASE_PATH + '/', (req, res) => {
@@ -46,7 +36,13 @@ app.get(BASE_PATH + '/requests/new', (req, res) => {
   res.render('request_form');
 });
 
+// Routery z prefixem (po definicji tras głównych)
+app.use(BASE_PATH + '/bands', bandsRouter);
+app.use(BASE_PATH + '/pubs', pubsRouter);
+app.use(BASE_PATH + '/requests', requestsRouter);
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log(`BASE_PATH is set to: "${BASE_PATH}"`);
 });
