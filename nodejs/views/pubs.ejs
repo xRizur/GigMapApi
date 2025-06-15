@@ -64,7 +64,7 @@
 <body>
   <h1>Puby Zarejestrowane w GigMap</h1>
   <div class="links">
-    <a href="/pubs/new">Dodaj pub</a> | <a href="/">Strona główna</a>
+    <a href="<%= basePath %>/pubs/new">Dodaj pub</a> | <a href="<%= basePath %>/">Strona główna</a>
   </div>
 
   <% if (pubs.length === 0) { %>
@@ -85,7 +85,7 @@
             <td><%= pub.location %></td>
             <td>
               <% if (pub.image) { %>
-                <img src="/<%= pub.image %>" alt="<%= pub.name %>" />
+                <img src="<%= basePath %>/uploads/<%= pub.image %>" alt="<%= pub.name %>" />
               <% } else { %>
                 Brak
               <% } %>

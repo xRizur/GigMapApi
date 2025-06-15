@@ -57,7 +57,7 @@
 </head>
 <body>
   <h1>Requesty koncertowe</h1>
-  <a href="/requests/new">Dodaj request</a> | <a href="/">Strona główna</a>
+  <a href="<%= basePath %>/requests/new">Dodaj request</a> | <a href="<%= basePath %>/">Strona główna</a>
 
   <table>
     <thead>
@@ -85,10 +85,10 @@
           <td><%= request.status %></td>
           <td class="actions">
             <% if (request.status === 'pending') { %>
-              <form action="/requests/<%= request._id %>/accept" method="POST">
+              <form action="<%= basePath %>/requests/<%= request._id %>/accept" method="POST">
                 <button class="accept">Akceptuj</button>
               </form>
-              <form action="/requests/<%= request._id %>/reject" method="POST">
+              <form action="<%= basePath %>/requests/<%= request._id %>/reject" method="POST">
                 <button class="reject">Odrzuć</button>
               </form>
             <% } else { %>
