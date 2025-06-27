@@ -38,50 +38,53 @@
 </head>
 <body>
   <div class="container">
-    <h1>Dodaj nowy zespół</h1>
-    <form action="<%= basePath %>/bands" method="POST" enctype="multipart/form-data">
+    <h1><%= typeof isEdit !== 'undefined' && isEdit ? 'Edytuj zespół' : 'Dodaj nowy zespół' %></h1>
+    <form action="<%= basePath %>/bands<%= typeof isEdit !== 'undefined' && isEdit ? '/update/' + band._id : '' %>" method="POST" enctype="multipart/form-data">
       <div>
         <label for="name">Nazwa:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" value="<%= typeof band !== 'undefined' ? band.name : '' %>" required>
       </div>
       <div>
         <label for="genre">Gatunek:</label>
-        <input type="text" id="genre" name="genre" required>
+        <input type="text" id="genre" name="genre" value="<%= typeof band !== 'undefined' ? band.genre : '' %>" required>
       </div>
       <div>
         <label for="description">Opis:</label>
-        <textarea id="description" name="description"></textarea>
+        <textarea id="description" name="description"><%= typeof band !== 'undefined' ? band.description || '' : '' %></textarea>
       </div>
       <div>
         <label for="contactEmail">Email kontaktowy:</label>
-        <input type="email" id="contactEmail" name="contactEmail">
+        <input type="email" id="contactEmail" name="contactEmail" value="<%= typeof band !== 'undefined' ? band.contactEmail || '' : '' %>">
       </div>
       <div>
         <label for="contactPhone">Telefon kontaktowy:</label>
-        <input type="tel" id="contactPhone" name="contactPhone">
+        <input type="tel" id="contactPhone" name="contactPhone" value="<%= typeof band !== 'undefined' ? band.contactPhone || '' : '' %>">
       </div>
       <div>
         <label for="websiteUrl">Strona internetowa:</label>
-        <input type="url" id="websiteUrl" name="websiteUrl">
+        <input type="url" id="websiteUrl" name="websiteUrl" value="<%= typeof band !== 'undefined' ? band.websiteUrl || '' : '' %>">
       </div>
       <div>
         <label for="image">Obrazek:</label>
         <input type="file" id="image" name="image">
+        <% if (typeof band !== 'undefined' && band.image) { %>
+          <p>Obecny obrazek: <img src="<%= basePath %>/<%= band.image %>" alt="<%= band.name %>" style="max-width: 100px; max-height: 100px;"></p>
+        <% } %>
       </div>
 
       <div>
         <h3>Dostępność (opcjonalnie)</h3>
         <div>
           <label for="availabilityStart">Początek dostępności:</label>
-          <input type="datetime-local" id="availabilityStart" name="availabilityStart">
+          <input type="datetime-local" id="availabilityStart" name="availabilityStart" value="<%= availabilityStart %>">
         </div>
         <div>
           <label for="availabilityEnd">Koniec dostępności:</label>
-          <input type="datetime-local" id="availabilityEnd" name="availabilityEnd">
+          <input type="datetime-local" id="availabilityEnd" name="availabilityEnd" value="<%= availabilityEnd %>">
         </div>
       </div>
 
-      <button type="submit">Dodaj</button>
+      <button type="submit"><%= typeof isEdit !== 'undefined' && isEdit ? 'Aktualizuj' : 'Dodaj' %></button>
     </form>
     <a href="<%= basePath %>/" class="nav-link">Powrót do strony głównej</a>
   </div>

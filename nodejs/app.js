@@ -37,14 +37,6 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
-app.get('/bands/new', (req, res) => {
-  res.render('band_form');
-});
-
-app.get('/pubs/new', (req, res) => {
-  res.render('pub_form');
-});
-
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

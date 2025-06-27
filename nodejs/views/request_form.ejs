@@ -35,13 +35,15 @@
 </head>
 <body>
   <div class="container">
-    <h1>Dodaj nowy request</h1>
-    <form action="<%= basePath %>/requests" method="POST">
+    <h1><%= typeof isEdit !== 'undefined' && isEdit ? 'Edytuj request' : 'Dodaj nowy request' %></h1>
+    <form action="<%= basePath %>/requests<%= typeof isEdit !== 'undefined' && isEdit ? '/update/' + request._id : '' %>" method="POST">
       <div>
         <label for="bandId">Zespół:</label>
         <select id="bandId" name="bandId" required>
           <% bands.forEach(band => { %>
-            <option value="<%= band._id %>"><%= band.name %></option>
+            <option value="<%= band._id %>" <%= typeof request !== 'undefined' && request.bandId.toString() === band._id.toString() ? 'selected' : '' %>>
+              <%= band.name %>
+            </option>
           <% }) %>
         </select>
       </div>
@@ -49,30 +51,34 @@
         <label for="pubId">Pub:</label>
         <select id="pubId" name="pubId" required>
           <% pubs.forEach(pub => { %>
-            <option value="<%= pub._id %>"><%= pub.name %></option>
+            <option value="<%= pub._id %>" <%= typeof request !== 'undefined' && request.pubId.toString() === pub._id.toString() ? 'selected' : '' %>>
+              <%= pub.name %>
+            </option>
           <% }) %>
         </select>
       </div>
       <div>
         <label for="start">Start:</label>
-        <input type="datetime-local" id="start" name="start" required>
+        <input type="datetime-local" id="start" name="start" 
+               value="<%= typeof request !== 'undefined' ? new Date(request.start).toISOString().slice(0, 16) : '' %>" required>
       </div>
       <div>
         <label for="end">Koniec:</label>
-        <input type="datetime-local" id="end" name="end" required>
+        <input type="datetime-local" id="end" name="end" 
+               value="<%= typeof request !== 'undefined' ? new Date(request.end).toISOString().slice(0, 16) : '' %>" required>
       </div>
       <div>
         <label for="message">Wiadomość:</label>
-        <input type="text" id="message" name="message">
+        <input type="text" id="message" name="message" value="<%= typeof request !== 'undefined' ? request.message || '' : '' %>">
       </div>
       <div>
         <label for="initiator">Inicjator:</label>
         <select id="initiator" name="initiator" required>
-          <option value="band">Zespół</option>
-          <option value="pub">Pub</option>
+          <option value="band" <%= typeof request !== 'undefined' && request.initiator === 'band' ? 'selected' : '' %>>Zespół</option>
+          <option value="pub" <%= typeof request !== 'undefined' && request.initiator === 'pub' ? 'selected' : '' %>>Pub</option>
         </select>
       </div>
-      <button type="submit">Dodaj</button>
+      <button type="submit"><%= typeof isEdit !== 'undefined' && isEdit ? 'Aktualizuj' : 'Dodaj' %></button>
     </form>
     <a href="<%= basePath %>/" class="nav-link">Powrót do strony głównej</a>
   </div>

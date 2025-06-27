@@ -97,9 +97,9 @@ const updateBand = async (req, res) => {
 
         if (availabilityStart && availabilityEnd && new Date(availabilityStart) < new Date(availabilityEnd)) {
             band.availability = [{ start: new Date(availabilityStart), end: new Date(availabilityEnd) }];
-        } else if (req.body.hasOwnProperty('availabilityStart') && req.body.hasOwnProperty('availabilityEnd')) {
+        } else if ('availabilityStart' in req.body && 'availabilityEnd' in req.body) {
+            band.availability = [];
         }
-
 
         if (req.file) {
             if (band.image && fs.existsSync(band.image)) {
@@ -112,11 +112,63 @@ const updateBand = async (req, res) => {
         }
 
         await band.save();
-        res.send("Band updated successfully: " + band._id);
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        res.redirect(`${basePath}/bands/view`);
 
     } catch (error) {
         console.error("Error updating band:", error);
         return res.status(500).send("Error updating band");
+    }
+};
+
+const editBand = async (req, res) => {
+    try {
+        const band = await Band.findById(req.params.id);
+        if (!band) {
+            return res.status(404).send("Band not found");
+        }
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+    
+        let availabilityStart = '';
+        let availabilityEnd = '';
+        if (band.availability && band.availability.length > 0) {
+            availabilityStart = new Date(band.availability[0].start).toISOString().slice(0, 16);
+            availabilityEnd = new Date(band.availability[0].end).toISOString().slice(0, 16);
+        }
+        
+        res.render('band_form', { 
+            band, 
+            basePath, 
+            isEdit: true,
+            availabilityStart,
+            availabilityEnd
+        });
+    } catch (error) {
+        console.error("Error fetching band for edit:", error);
+        res.status(500).send("Error fetching band");
+    }
+};
+
+const deleteBandForm = async (req, res) => {
+    try {
+        const { id } = req.body;
+        
+        const band = await Band.findByIdAndDelete(id);
+        if (!band) {
+            return res.status(404).send("Band not found");
+        }
+        if (band.image && fs.existsSync(band.image)) {
+            fs.unlink(band.image, (err) => {
+                if (err) {
+                    console.error("Error deleting image:", err);
+                }
+            });
+        }
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        res.redirect(`${basePath}/bands/view`);
+    } catch (error) {
+        console.error("Error deleting band:", error);
+        res.status(500).send("Error deleting band");
     }
 };
 
@@ -159,4 +211,4 @@ const updateBandAvailability = async (req, res) => {
     }
 }
 
-module.exports = {addBand, getBands, viewBands, deleteBand, updateBand, getBandAvailability, updateBandAvailability};
+module.exports = {addBand, getBands, viewBands, deleteBand, updateBand, getBandAvailability, updateBandAvailability, editBand, deleteBandForm};

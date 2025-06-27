@@ -101,7 +101,8 @@ const updatePub = async (req, res) => {
 
         if (availabilityStart && availabilityEnd && new Date(availabilityStart) < new Date(availabilityEnd)) {
             pub.availability = [{ start: new Date(availabilityStart), end: new Date(availabilityEnd) }];
-        } else if (req.body.hasOwnProperty('availabilityStart') && req.body.hasOwnProperty('availabilityEnd')) {
+        } else if ('availabilityStart' in req.body && 'availabilityEnd' in req.body) {
+            pub.availability = [];
         }
     
         if (req.file) {
@@ -115,11 +116,63 @@ const updatePub = async (req, res) => {
         }
     
         await pub.save();
-        res.send("Pub updated successfully: " + pub._id);
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        res.redirect(`${basePath}/pubs/view`);
     
     } catch (error) {
         console.error("Error updating pub:", error);
         return res.status(500).send("Error updating pub");
+    }
+};
+
+const editPub = async (req, res) => {
+    try {
+        const pub = await Pub.findById(req.params.id);
+        if (!pub) {
+            return res.status(404).send("Pub not found");
+        }
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        
+        let availabilityStart = '';
+        let availabilityEnd = '';
+        if (pub.availability && pub.availability.length > 0) {
+            availabilityStart = new Date(pub.availability[0].start).toISOString().slice(0, 16);
+            availabilityEnd = new Date(pub.availability[0].end).toISOString().slice(0, 16);
+        }
+        
+        res.render('pub_form', { 
+            pub, 
+            basePath, 
+            isEdit: true,
+            availabilityStart,
+            availabilityEnd
+        });
+    } catch (error) {
+        console.error("Error fetching pub for edit:", error);
+        res.status(500).send("Error fetching pub");
+    }
+};
+
+const deletePubForm = async (req, res) => {
+    try {
+        const { id } = req.body;
+        
+        const pub = await Pub.findByIdAndDelete(id);
+        if (!pub) {
+            return res.status(404).send("Pub not found");
+        }
+        if (pub.image && fs.existsSync(pub.image)) {
+            fs.unlink(pub.image, (err) => {
+                if (err) {
+                    console.error("Error deleting image:", err);
+                }
+            });
+        }
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        res.redirect(`${basePath}/pubs/view`);
+    } catch (error) {
+        console.error("Error deleting pub:", error);
+        res.status(500).send("Error deleting pub");
     }
 };
 
@@ -163,4 +216,4 @@ const updatePubAvailability = async (req, res) => {
     }
 };
 
-module.exports = {addPub, getPubs, viewPubs, deletePub, updatePub, getPubAvailability, updatePubAvailability};
+module.exports = {addPub, getPubs, viewPubs, deletePub, updatePub, getPubAvailability, updatePubAvailability, editPub, deletePubForm};

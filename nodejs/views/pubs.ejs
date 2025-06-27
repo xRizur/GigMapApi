@@ -69,6 +69,43 @@
       background-color: #45a049;
       text-decoration: none;
     }
+
+    .actions {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .actions form {
+      display: inline;
+    }
+
+    .btn {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 12px;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-edit {
+      background-color: #2196F3;
+    }
+
+    .btn-edit:hover {
+      background-color: #1976D2;
+    }
+
+    .btn-delete {
+      background-color: #f44336;
+    }
+
+    .btn-delete:hover {
+      background-color: #d32f2f;
+    }
   </style>
 </head>
 <body>
@@ -94,6 +131,7 @@
           <th>Mapa</th>
           <th>Obrazek</th>
           <th>Dostępność</th>
+          <th>Akcje</th>
         </tr>
       </thead>
       <tbody>
@@ -136,6 +174,14 @@
               <% } else { %>
                 Brak informacji
               <% } %>
+            </td>
+            <td class="actions">
+              <a href="<%= basePath %>/pubs/edit/<%= pub._id %>" class="btn btn-edit">Edytuj</a>
+              <form action="<%= basePath %>/pubs/delete" method="POST" style="display: inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć ten pub?')">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="id" value="<%= pub._id %>">
+                <button type="submit" class="btn btn-delete">Usuń</button>
+              </form>
             </td>
           </tr>
         <% }) %>

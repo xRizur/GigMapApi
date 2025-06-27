@@ -38,58 +38,61 @@
 </head>
 <body>
   <div class="container">
-    <h1>Dodaj nowy pub</h1>
-    <form action="<%= basePath %>/pubs" method="POST" enctype="multipart/form-data">
+    <h1><%= typeof isEdit !== 'undefined' && isEdit ? 'Edytuj pub' : 'Dodaj nowy pub' %></h1>
+    <form action="<%= basePath %>/pubs<%= typeof isEdit !== 'undefined' && isEdit ? '/update/' + pub._id : '' %>" method="POST" enctype="multipart/form-data">
       <div>
         <label for="name">Nazwa:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name" value="<%= typeof pub !== 'undefined' ? pub.name : '' %>" required>
       </div>
       <div>
         <label for="city">Miasto:</label>
-        <input type="text" id="city" name="city" required>
+        <input type="text" id="city" name="city" value="<%= typeof pub !== 'undefined' ? pub.city : '' %>" required>
       </div>
       <div>
         <label for="address">Adres:</label>
-        <input type="text" id="address" name="address" required>
+        <input type="text" id="address" name="address" value="<%= typeof pub !== 'undefined' ? pub.address : '' %>" required>
       </div>
       <div>
         <label for="description">Opis:</label>
-        <textarea id="description" name="description"></textarea>
+        <textarea id="description" name="description"><%= typeof pub !== 'undefined' ? pub.description || '' : '' %></textarea>
       </div>
       <div>
         <label for="contactEmail">Email kontaktowy:</label>
-        <input type="email" id="contactEmail" name="contactEmail">
+        <input type="email" id="contactEmail" name="contactEmail" value="<%= typeof pub !== 'undefined' ? pub.contactEmail || '' : '' %>">
       </div>
       <div>
         <label for="contactPhone">Telefon kontaktowy:</label>
-        <input type="tel" id="contactPhone" name="contactPhone">
+        <input type="tel" id="contactPhone" name="contactPhone" value="<%= typeof pub !== 'undefined' ? pub.contactPhone || '' : '' %>">
       </div>
       <div>
         <label for="websiteUrl">Strona internetowa:</label>
-        <input type="url" id="websiteUrl" name="websiteUrl">
+        <input type="url" id="websiteUrl" name="websiteUrl" value="<%= typeof pub !== 'undefined' ? pub.websiteUrl || '' : '' %>">
       </div>
       <div>
         <label for="map_url">Link do mapy (opcjonalnie):</label>
-        <input type="url" id="map_url" name="map_url">
+        <input type="url" id="map_url" name="map_url" value="<%= typeof pub !== 'undefined' ? pub.map_url || '' : '' %>">
       </div>
       <div>
         <label for="image">Obrazek:</label>
         <input type="file" id="image" name="image">
+        <% if (typeof pub !== 'undefined' && pub.image) { %>
+          <p>Obecny obrazek: <img src="<%= basePath %>/<%= pub.image %>" alt="<%= pub.name %>" style="max-width: 100px; max-height: 100px;"></p>
+        <% } %>
       </div>
 
       <div>
         <h3>Dostępność (opcjonalnie)</h3>
         <div>
           <label for="availabilityStart">Początek dostępności:</label>
-          <input type="datetime-local" id="availabilityStart" name="availabilityStart">
+          <input type="datetime-local" id="availabilityStart" name="availabilityStart" value="<%= availabilityStart %>">
         </div>
         <div>
           <label for="availabilityEnd">Koniec dostępności:</label>
-          <input type="datetime-local" id="availabilityEnd" name="availabilityEnd">
+          <input type="datetime-local" id="availabilityEnd" name="availabilityEnd" value="<%= availabilityEnd %>">
         </div>
       </div>
 
-      <button type="submit">Dodaj</button>
+      <button type="submit"><%= typeof isEdit !== 'undefined' && isEdit ? 'Aktualizuj' : 'Dodaj' %></button>
     </form>
     <a href="<%= basePath %>/" class="nav-link">Powrót do strony głównej</a>
   </div>

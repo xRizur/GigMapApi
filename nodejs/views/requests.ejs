@@ -82,6 +82,19 @@
       background-color: #dc3545;
       color: white;
     }
+
+    .btn-delete {
+      background-color: #6c757d;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background-color: #545b62;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +138,12 @@
             <% } else { %>
               -
             <% } %>
+            <a href="<%= basePath %>/requests/edit/<%= request._id %>" class="btn btn-edit" style="background-color: #2196F3; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; margin-right: 5px;">Edytuj</a>
+            <form action="<%= basePath %>/requests/delete" method="POST" style="display: inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć ten request?')">
+              <input type="hidden" name="_method" value="DELETE">
+              <input type="hidden" name="id" value="<%= request._id %>">
+              <button type="submit" class="btn-delete">Usuń</button>
+            </form>
           </td>
         </tr>
       <% }) %>

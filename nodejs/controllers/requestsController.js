@@ -162,5 +162,75 @@ const viewRequests = async (req, res) => {
       res.status(500).send("Error");
     }
   };
+
+const deleteRequest = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const request = await Request.findByIdAndDelete(id);
+    if (!request) {
+      return res.status(404).send("Request not found");
+    }
+    const basePath = res.locals.basePath || req.app.locals.basePath || '';
+    res.redirect(`${basePath}/requests/view`);
+  } catch (error) {
+    console.error("Error deleting request:", error);
+    res.status(500).send("Error deleting request");
+  }
+};
+
+const editRequest = async (req, res) => {
+    try {
+        const request = await Request.findById(req.params.id);
+        if (!request) {
+            return res.status(404).send("Request not found");
+        }
+        const bands = await Band.find({}, 'id name').exec();
+        const pubs = await Pub.find({}, 'id name').exec();
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        res.render('request_form', { request, bands, pubs, basePath, isEdit: true });
+    } catch (error) {
+        console.error("Error fetching request for edit:", error);
+        res.status(500).send("Error fetching request");
+    }
+};
+
+const updateRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { bandId, pubId, start, end, message, initiator } = req.body;
+
+        if (!bandId || !pubId || !start || !end || !initiator) {
+            return res.status(400).send("Missing required fields");
+        }
+
+        if (!['band', 'pub'].includes(initiator)) {
+            return res.status(400).send("Invalid initiator value");
+        }
+
+        if (new Date(start) >= new Date(end)) {
+            return res.status(400).send("Invalid time range");
+        }
+
+        const request = await Request.findByIdAndUpdate(id, {
+            bandId,
+            pubId,
+            start,
+            end,
+            message,
+            initiator
+        });
+
+        if (!request) {
+            return res.status(404).send("Request not found");
+        }
+
+        const basePath = res.locals.basePath || req.app.locals.basePath || '';
+        res.redirect(`${basePath}/requests/view`);
+
+    } catch (error) {
+        console.error("Error updating request:", error);
+        res.status(500).send("Error updating request");
+    }
+};
   
-module.exports = { createRequest, getRequests, viewRequests, acceptRequest, rejectRequest, showNewRequestForm };
+module.exports = { createRequest, getRequests, viewRequests, acceptRequest, rejectRequest, showNewRequestForm, deleteRequest, editRequest, updateRequest };
